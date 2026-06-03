@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kelbas Technik – Elektro & Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #080c14;
+    --surface:  #0e1520;
+    --card:     #121a28;
+    --border:   rgba(255,255,255,0.07);
+    --amber:    #f5a623;
+    --amber2:   #ff7c1a;
+    --cyan:     #22d4f0;
+    --text:     #e8edf5;
+    --muted:    #6b7a94;
+    --ff-display: 'Bebas Neue', sans-serif;
+    --ff-body:    'DM Sans', sans-serif;
+    --ff-mono:    'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--ff-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    position: fixed; top: 0; left: 0;
+    width: 12px; height: 12px;
+    background: var(--amber);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%,-50%);
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--amber);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.35s ease, opacity 0.2s;
+    transform: translate(-50%,-50%);
+    opacity: 0.5;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(8,12,20,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--ff-display);
+    font-size: 1.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--amber); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--amber); }
+  .nav-cta {
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--bg);
+    background: var(--amber);
+    padding: 0.55rem 1.4rem;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--amber2); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+    gap: 4rem;
+  }
+  .hero-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+    top: -100px; left: -100px;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,212,240,0.07) 0%, transparent 70%);
+    bottom: -50px; right: 0;
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid rgba(245,166,35,0.3);
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  .hero h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(4rem, 8vw, 7.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 1.8rem;
+  }
+  .hero h1 .accent { color: var(--amber); }
+  .hero h1 .stroke {
+    -webkit-text-stroke: 1.5px var(--text);
+    color: transparent;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--amber), var(--amber2));
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    transition: opacity 0.2s, transform 0.2s;
+    font-weight: 700;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* HERO RIGHT — stat panel */
+  .hero-panel {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; gap: 1.2rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.6rem 2rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .stat-card.visible { opacity: 1; transform: translateX(0); }
+  .stat-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--amber), transparent);
+  }
+  .stat-card.cyan::before { background: linear-gradient(180deg, var(--cyan), transparent); }
+  .stat-num {
+    font-family: var(--ff-display);
+    font-size: 2.8rem;
+    line-height: 1;
+    color: var(--amber);
+    margin-bottom: 0.3rem;
+  }
+  .stat-card.cyan .stat-num { color: var(--cyan); }
+  .stat-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pikett-badge {
+    background: rgba(245,166,35,0.1);
+    border: 1px solid rgba(245,166,35,0.3);
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .pikett-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .pikett-text .big {
+    font-family: var(--ff-display);
+    font-size: 1.4rem;
+    color: var(--amber);
+    letter-spacing: 0.05em;
+  }
+  .pikett-text .small {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* SECTION COMMON */
+  section { padding: 6rem 4rem; position: relative; }
+  .section-label {
+    font-family: var(--ff-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0.9rem 0;
+  }
+  .ticker {
+    display: flex; gap: 4rem;
+    animation: ticker 20s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    font-family: var(--ff-display);
+    font-size: 1.05rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 1.5rem;
+    flex-shrink: 0;
+  }
+  .ticker-item .dot {
+    width: 5px; height: 5px;
+    background: var(--amber);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SERVICES */
+  #leistungen { background: var(--surface); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    margin-top: 3.5rem;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .service-card {
+    background: var(--card);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s;
+  }
+  .service-card.visible { opacity: 1; transform: translateY(0); }
+  .service-card:hover { background: #1a2336; }
+  .service-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(245,166,35,0.05), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .service-card:hover::after { opacity: 1; }
+  .service-icon {
+    width: 48px; height: 48px;
+    background: rgba(245,166,35,0.1);
+    border: 1px solid rgba(245,166,35,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .service-card h3 {
+    font-family: var(--ff-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+  .service-card p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .service-num {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    font-family: var(--ff-mono);
+    font-size: 0.65rem;
+    color: rgba(245,166,35,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  /* PIKETT HIGHLIGHT */
+  #pikett {
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    padding: 6rem 4rem;
+  }
+  .pikett-visual {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 420px;
+  }
+  .pikett-ring {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(245,166,35,0.15);
+    animation: spin 20s linear infinite;
+  }
+  .pikett-ring:nth-child(2) {
+    inset: 15%;
+    border-color: rgba(245,166,35,0.25);
+    animation-duration: 14s;
+    animation-direction: reverse;
+  }
+  .pikett-ring:nth-child(3) {
+    inset: 30%;
+    border-color: rgba(245,166,35,0.4);
+    animation-duration: 8s;
+  }
+  .pikett-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .pikett-center .big-num {
+    font-family: var(--ff-display);
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--amber);
+  }
+  .pikett-center .sub {
+    font-family: var(--ff-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .pikett-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: var(--amber);
+    border-radius: 50%;
+    top: 0; left: 50%;
+    transform-origin: 0 210px;
+    animation: orbit 8s linear infinite;
+    box-shadow: 0 0 12px var(--amber);
+  }
+  @keyframes orbit { from { transform: translateX(-50%) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg); } }
+
+  /* LOCATIONS */
+  #standorte { background: var(--surface); }
+  .locations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .location-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .location-card.visible { opacity: 1; transform: translateY(0); }
+  .location-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--amber), transparent);
+  }
+  .loc-num {
+    font-family: var(--ff-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+  }
+  .location-card h3 {
+    font-family: var(--ff-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+  .location-card address {
+    font-style: normal;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .loc-map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-family: var(--ff-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .loc-map-btn:hover { gap: 0.9rem; }
+
+  /* CONTACT */
+  #kontakt { background: var(--bg); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3.5rem;
+    align-items: start;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s;
+  }
+  .contact-item.visible { opacity: 1; transform: translateX(0); }
+  .contact-item:hover { border-color: rgba(245,166,35,0.3); }
+  .ci-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: rgba(245,166,35,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  }
+  .ci-label {
+    font-family: var(--ff-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .ci-value {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .ci-value a { color: var(--text); text-decoration: none; transition: color 0.2s; }
+  .ci-value a:hover { color: var(--amber); }
+  .ci-note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+    font-family: var(--ff-mono);
+  }
+
+  /* CONTACT FORM */
+  .contact-form-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+  }
+  .contact-form-wrap.visible { opacity: 1; transform: translateX(0); }
+  .form-title {
+    font-family: var(--ff-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.8rem;
+  }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--ff-body);
+    font-size: 0.9rem;
+    padding: 0.8rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--amber); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .btn-submit {
+    width: 100%;
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--amber), var(--amber2));
+    border: none;
+    padding: 1rem;
+    cursor: none;
+    margin-top: 0.5rem;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-submit:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .footer-logo {
+    font-family: var(--ff-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+  .footer-logo span { color: var(--amber); }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-family: var(--ff-mono);
+    letter-spacing: 0.05em;
+  }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--amber); }
+
+  /* SCROLL FADE-IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+    section { padding: 4rem 1.5rem; }
+    #pikett { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+    .locations-grid, .contact-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    .hero-panel { max-width: 100%; }
+    .pikett-visual { max-width: 280px; margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">KELBAS<span>.</span>TECHNIK</a>
+  <ul class="nav-links">
+    <li><a href="#leistungen">Leistungen</a></li>
+    <li><a href="#pikett">Pikett</a></li>
+    <li><a href="#standorte">Standorte</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="tel:+41796088149" class="nav-cta">+41 79 608 81 49</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">⚡ Schweizer Elektrotechnik</div>
+    <h1>STROM.<br/><span class="accent">SICHER.</span><br/><span class="stroke">SMART.</span></h1>
+    <p class="hero-sub">
+      Ihr zuverlässiger Partner für Elektroinstallationen, Sicherheitsanlagen, Gebäudeautomation und 24/7-Piketteinsätze in der Region Basel.
+    </p>
+    <div class="hero-actions">
+      <a href="#kontakt" class="btn-primary">Kontakt aufnehmen</a>
+      <a href="#leistungen" class="btn-ghost">Unsere Leistungen →</a>
+    </div>
+  </div>
+
+  <div class="hero-panel">
+    <div class="pikett-badge">
+      <div class="pikett-icon">🚨</div>
+      <div class="pikett-text">
+        <div class="big">24 / 7 Pikettdienst</div>
+        <div class="small">Elektro-Notfalldienst · Schnell vor Ort</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Standorte — Brislach & Hofstetten</div>
+    </div>
+    <div class="stat-card cyan">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">Spezialbereiche in der Elektrotechnik</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item"><span class="dot"></span>Elektroinstallationen</div>
+    <div class="ticker-item"><span class="dot"></span>Sicherheitsanlagen</div>
+    <div class="ticker-item"><span class="dot"></span>Brandschutz</div>
+    <div class="ticker-item"><span class="dot"></span>Gebäudeautomation</div>
+    <div class="ticker-item"><span class="dot"></span>Kommunikationssysteme</div>
+    <div class="ticker-item"><span class="dot"></span>Geräteprüfung</div>
+    <div class="ticker-item"><span class="dot"></span>24/7 Pikett</div>
+    <div class="ticker-item"><span class="dot"></span>Elektroinstallationen</div>
+    <div class="ticker-item"><span class="dot"></span>Sicherheitsanlagen</div>
+    <div class="ticker-item"><span class="dot"></span>Brandschutz</div>
+    <div class="ticker-item"><span class="dot"></span>Gebäudeautomation</div>
+    <div class="ticker-item"><span class="dot"></span>Kommunikationssysteme</div>
+    <div class="ticker-item"><span class="dot"></span>Geräteprüfung</div>
+    <div class="ticker-item"><span class="dot"></span>24/7 Pikett</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="leistungen">
+  <div class="fade-in">
+    <div class="section-label">// 01 — Leistungen</div>
+    <div class="section-title">WAS WIR<br/>BIETEN</div>
+    <p class="section-sub">Von der klassischen Elektroinstallation bis hin zu intelligenter Gebäudeautomation — wir decken das gesamte Spektrum der modernen Elektrotechnik ab.</p>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-icon">⚡</div>
+      <h3>Elektroinstallationen</h3>
+      <p>Professionelle Neu- und Umbauten für Wohn- und Gewerbegebäude. Von der Planung bis zur Abnahme — alles aus einer Hand.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-icon">🛡️</div>
+      <h3>Sicherheitsanlagen</h3>
+      <p>Modernste Einbruchmelder, Zugangssysteme und Überwachungstechnik für maximalen Schutz Ihrer Liegenschaften.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-icon">🔥</div>
+      <h3>Brandschutzanlagen</h3>
+      <p>Zuverlässige Brandmeldesysteme, Sprinkleransteuerung und Notbeleuchtung nach aktuellen Normen und Vorschriften.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-icon">🏠</div>
+      <h3>Gebäudeautomation</h3>
+      <p>Intelligente Steuerung von Licht, Heizung, Klima und Beschattung. Smarte Vernetzung für mehr Komfort und Energieeffizienz.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <div class="service-icon">📡</div>
+      <h3>Kommunikationssysteme</h3>
+      <p>Strukturierte Verkabelung, Netzwerkinfrastruktur, Intercom-Anlagen und moderne Datentechnik für Büro und Betrieb.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <div class="service-icon">🔬</div>
+      <h3>Geräteprüfung</h3>
+      <p>Normgerechte Prüfung ortsveränderlicher Elektrogeräte (SUVA/VDE) mit vollständiger Dokumentation und Prüfprotokoll.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="service-num">07</div>
+      <div class="service-icon">🚨</div>
+      <h3>24/7 Pikettdienst</h3>
+      <p>Rund um die Uhr verfügbar — unser Pikettdienst für elektrotechnische Notfälle ist schnell, kompetent und zuverlässig vor Ort.</p>
+    </div>
+
+    <div class="service-card" style="background: rgba(245,166,35,0.04);">
+      <div class="service-num">+</div>
+      <div class="service-icon" style="background:rgba(34,212,240,0.1); border-color:rgba(34,212,240,0.2);">💡</div>
+      <h3>Individuelle Lösungen</h3>
+      <p>Jedes Projekt ist einzigartig. Wir erarbeiten gemeinsam mit Ihnen massgeschneiderte Konzepte für Ihre spezifischen Anforderungen.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- PIKETT DETAIL -->
+<section id="pikett">
+  <div class="pikett-visual">
+    <div class="pikett-ring"></div>
+    <div class="pikett-ring"></div>
+    <div class="pikett-ring"></div>
+    <div class="pikett-dot"></div>
+    <div class="pikett-center">
+      <div class="big-num">24/7</div>
+      <div class="sub">Pikettdienst Elektro</div>
+    </div>
+  </div>
+  <div class="fade-in">
+    <div class="section-label">// 02 — Notfalldienst</div>
+    <div class="section-title">IMMER<br/>BEREIT</div>
+    <p class="section-sub" style="margin-bottom:1.5rem;">
+      Elektrische Störungen kennen keine Geschäftszeiten. Unser 24/7-Pikettdienst im Bereich Elektro stellt sicher, dass Sie jederzeit schnell und professionell Hilfe erhalten — egal ob mitten in der Nacht oder am Wochenende.
+    </p>
+    <p class="section-sub" style="margin-bottom:2rem;">
+      Wir sind für Privatkunden, Gewerbe und Industrie im Raum Basel und Umgebung verfügbar.
+    </p>
+    <a href="tel:+41796088149" class="btn-primary">Jetzt anrufen: +41 79 608 81 49</a>
+  </div>
+</section>
+
+<!-- STANDORTE -->
+<section id="standorte">
+  <div class="fade-in">
+    <div class="section-label">// 03 — Standorte</div>
+    <div class="section-title">ZWEI<br/>STANDORTE</div>
+    <p class="section-sub">Optimal positioniert in der Region Baselland — für schnelle Einsatzzeiten und lokale Kompetenz.</p>
+  </div>
+  <div class="locations-grid">
+    <div class="location-card">
+      <div class="loc-num">Standort 01</div>
+      <h3>Brislach</h3>
+      <address>
+        Hofgarten 44<br/>
+        4225 Brislach<br/>
+        Kanton Basel-Landschaft
+      </address>
+      <a href="https://maps.google.com/?q=Hofgarten+44,+4225+Brislach" target="_blank" class="loc-map-btn">
+        Auf Karte anzeigen →
+      </a>
+    </div>
+    <div class="location-card">
+      <div class="loc-num">Standort 02</div>
+      <h3>Hofstetten</h3>
+      <address>
+        Ettingerstrasse 51<br/>
+        4114 Hofstetten<br/>
+        Kanton Basel-Landschaft
+      </address>
+      <a href="https://maps.google.com/?q=Ettingerstrasse+51,+4114+Hofstetten" target="_blank" class="loc-map-btn">
+        Auf Karte anzeigen →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt">
+  <div class="fade-in">
+    <div class="section-label">// 04 — Kontakt</div>
+    <div class="section-title">SPRECHEN<br/>WIR</div>
+    <p class="section-sub">Haben Sie ein Projekt oder einen Notfall? Kontaktieren Sie uns direkt — wir melden uns prompt zurück.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="ci-icon">📞</div>
+        <div>
+          <div class="ci-label">Telefon</div>
+          <div class="ci-value"><a href="tel:+41796088149">+41 79 608 81 49</a></div>
+          <div class="ci-note">Auch für Pikettdienst 24/7</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-icon">✉️</div>
+        <div>
+          <div class="ci-label">E-Mail</div>
+          <div class="ci-value"><a href="mailto:Kelbas.technik@gmail.com">Kelbas.technik@gmail.com</a></div>
+          <div class="ci-note">Adresse wird in Kürze aktualisiert</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-icon">📍</div>
+        <div>
+          <div class="ci-label">Standorte</div>
+          <div class="ci-value">Brislach &amp; Hofstetten</div>
+          <div class="ci-note">Region Basel-Landschaft</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-icon">🕐</div>
+        <div>
+          <div class="ci-label">Erreichbarkeit</div>
+          <div class="ci-value">Mo–Fr 07:00–17:00</div>
+          <div class="ci-note">Pikettdienst Elektro: 24/7</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap">
+      <div class="form-title">NACHRICHT SENDEN</div>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vorname</label>
+            <input type="text" placeholder="Max"/>
+          </div>
+          <div class="form-group">
+            <label>Nachname</label>
+            <input type="text" placeholder="Mustermann"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-Mail</label>
+          <input type="email" placeholder="ihre@email.ch"/>
+        </div>
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" placeholder="+41 79 000 00 00"/>
+        </div>
+        <div class="form-group">
+          <label>Betreff</label>
+          <select>
+            <option>Allgemeine Anfrage</option>
+            <option>Elektroinstallation</option>
+            <option>Sicherheitsanlage</option>
+            <option>Brandschutz</option>
+            <option>Gebäudeautomation</option>
+            <option>Kommunikationssysteme</option>
+            <option>Geräteprüfung</option>
+            <option>Pikettdienst / Notfall</option>
+            <option>Offerte anfragen</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nachricht</label>
+          <textarea placeholder="Beschreiben Sie Ihr Anliegen..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Nachricht absenden →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">KELBAS<span>.</span>TECHNIK</div>
+  <div class="footer-copy">© 2026 Kelbas Technik. Alle Rechte vorbehalten.</div>
+  <div class="footer-links">
+    <a href="#leistungen">Leistungen</a>
+    <a href="#standorte">Standorte</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+</footer>
+
+<script>
+  // CUSTOM CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let rx = 0, ry = 0, mx = 0, my = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`; });
+  function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`; requestAnimationFrame(animRing); }
+  animRing();
+  document.querySelectorAll('a, button, input, textarea, select').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform += ' scale(1.5)'; ring.style.opacity = '1'; });
+    el.addEventListener('mouseleave', () => { ring.style.opacity = '0.5'; });
+  });
+
+  // INTERSECTION OBSERVER
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in, .service-card, .stat-card, .location-card, .contact-item, .contact-form-wrap').forEach(el => obs.observe(el));
+
+  // STAGGER service cards
+  document.querySelectorAll('.service-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.07}s`;
+  });
+
+  // FORM
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-submit');
+    btn.textContent = '✓ Nachricht gesendet!';
+    btn.style.background = 'linear-gradient(135deg, #22d4f0, #0ba8c2)';
+    setTimeout(() => {
+      btn.textContent = 'Nachricht absenden →';
+      btn.style.background = '';
+    }, 3000);
+  }
+
+  // NAV scroll effect
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.borderBottomColor = window.scrollY > 50 ? 'rgba(245,166,35,0.15)' : 'rgba(255,255,255,0.07)';
+  });
+</script>
+</body>
+</html>

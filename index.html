@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kelbas Technik – Elektro & Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f7f4;--surface:#ffffff;--card:#f2f0ec;--border:rgba(0,0,0,0.08);
+  --amber:#e8920a;--amber2:#d4700a;--amberlt:rgba(232,146,10,0.1);--cyan:#0891b2;--text:#1a1f2e;--muted:#6b7280;
+  --shadow:0 2px 16px rgba(0,0,0,0.07);--shadow-md:0 4px 32px rgba(0,0,0,0.1);
+  --ff-d:'Bebas Neue',sans-serif;--ff-b:'DM Sans',sans-serif;--ff-m:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-b);font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;top:0;left:0;width:12px;height:12px;background:var(--amber);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s ease}
+.cursor-ring{position:fixed;top:0;left:0;width:38px;height:38px;border:1.5px solid var(--amber);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:opacity .2s}
+body::before{display:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(248,247,244,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:border-color .3s;box-shadow:var(--shadow)}
+.nav-logo{font-family:var(--ff-d);font-size:1.7rem;letter-spacing:.08em;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--amber)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--amber)}
+.nav-cta{font-family:var(--ff-m);font-size:.75rem;letter-spacing:.1em;color:#fff;background:var(--amber);padding:.55rem 1.4rem;text-decoration:none;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));transition:background .2s}
+.nav-cta:hover{background:var(--amber2)}
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 4rem 4rem;position:relative;overflow:hidden;gap:4rem;background:linear-gradient(135deg,#f8f7f4 0%,#fff 50%,#fef8f0 100%)}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,0.055) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.055) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%)}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(232,146,10,.15) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none}
+.hero-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(8,145,178,.08) 0%,transparent 70%);bottom:-50px;right:0;pointer-events:none}
+.hero-content{position:relative;z-index:2}
+.hero-tag{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--ff-m);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(232,146,10,.35);padding:.4rem 1rem;margin-bottom:2rem;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.hero-tag::before{content:'';width:6px;height:6px;background:var(--amber);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{font-family:var(--ff-d);font-size:clamp(4rem,8vw,7.5rem);line-height:.92;letter-spacing:.02em;margin-bottom:1.8rem}
+.hero h1 .accent{color:var(--amber)}
+.hero h1 .stroke{-webkit-text-stroke:1.5px var(--text);color:transparent}
+.hero-sub{font-size:1.05rem;font-weight:300;color:var(--muted);max-width:480px;line-height:1.7;margin-bottom:2.5rem}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{font-family:var(--ff-m);font-size:.8rem;letter-spacing:.1em;color:#fff;background:linear-gradient(135deg,var(--amber),var(--amber2));padding:.85rem 2rem;text-decoration:none;display:inline-block;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));transition:opacity .2s,transform .2s;font-weight:700}
+.btn-primary:hover{opacity:.85;transform:translateY(-2px)}
+.btn-ghost{font-family:var(--ff-m);font-size:.8rem;letter-spacing:.1em;color:var(--text);background:transparent;border:1px solid var(--border);padding:.85rem 2rem;text-decoration:none;display:inline-block;transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+.hero-panel{position:relative;z-index:2;display:flex;flex-direction:column;gap:1.2rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);padding:1.6rem 2rem;position:relative;overflow:hidden;opacity:0;transform:translateX(40px);transition:opacity .6s ease,transform .6s ease;box-shadow:var(--shadow)}
+.stat-card.visible{opacity:1;transform:translateX(0)}
+.stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--amber)}
+.stat-card.cyan::before{background:var(--cyan)}
+.stat-num{font-family:var(--ff-d);font-size:2.8rem;line-height:1;color:var(--amber);margin-bottom:.3rem}
+.stat-card.cyan .stat-num{color:var(--cyan)}
+.stat-label{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pikett-badge{background:rgba(232,146,10,.08);border:1px solid rgba(232,146,10,.25);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.pikett-icon{font-size:2rem;line-height:1}
+.pikett-text .big{font-family:var(--ff-d);font-size:1.4rem;color:var(--amber);letter-spacing:.05em}
+.pikett-text .small{font-size:.75rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+/* photo strip */
+.photo-strip{display:grid;grid-template-columns:2fr 1fr 1fr;height:440px;gap:5px;overflow:hidden}
+.ps-slot{position:relative;overflow:hidden}
+.ps-slot img{width:100%;height:100%;object-fit:cover;filter:brightness(.78) saturate(.92);transition:filter .5s,transform .6s}
+.ps-slot:hover img{filter:brightness(.9) saturate(1.1);transform:scale(1.04)}
+.ps-cap{position:absolute;bottom:0;left:0;right:0;padding:.7rem 1rem;background:linear-gradient(0,rgba(26,31,46,.8),transparent);font-family:var(--ff-m);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,205,100,.95)}
+
+section{padding:6rem 4rem;position:relative}
+.section-label{font-family:var(--ff-m);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem}
+.section-title{font-family:var(--ff-d);font-size:clamp(2.5rem,5vw,4.5rem);line-height:1;letter-spacing:.02em;margin-bottom:1rem}
+.section-sub{font-size:1rem;color:var(--muted);max-width:560px;line-height:1.7;font-weight:300}
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#1a1f2e;padding:.9rem 0}
+.ticker{display:flex;gap:4rem;animation:ticker 22s linear infinite;white-space:nowrap}
+.ticker-item{font-family:var(--ff-d);font-size:1.05rem;letter-spacing:.15em;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:1.5rem;flex-shrink:0}
+.ticker-item .dot{width:5px;height:5px;background:#e8920a;border-radius:50%;flex-shrink:0}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* services */
+#leistungen{background:var(--bg)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3.5rem;background:transparent;border:none}
+.service-card{background:var(--surface);border:1px solid var(--border);padding:2.5rem 2rem;position:relative;overflow:hidden;opacity:0;transform:translateY(30px);transition:opacity .5s ease,transform .5s ease,background .3s;box-shadow:var(--shadow)}
+.service-card.visible{opacity:1;transform:translateY(0)}
+.service-card.visible:hover{background:#fff;box-shadow:var(--shadow-md);transform:translateY(-4px)}
+.service-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,146,10,.04),transparent 60%);opacity:0;transition:opacity .3s}
+.service-card:hover::after{opacity:1}
+.service-icon{width:48px;height:48px;background:rgba(232,146,10,.1);border:1px solid rgba(232,146,10,.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.3rem;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.service-card h3{font-family:var(--ff-d);font-size:1.5rem;letter-spacing:.04em;margin-bottom:.8rem}
+.service-card p{font-size:.88rem;color:var(--muted);line-height:1.7;font-weight:300}
+.service-num{position:absolute;top:1.5rem;right:1.5rem;font-family:var(--ff-m);font-size:.65rem;color:rgba(232,146,10,.35);letter-spacing:.1em}
+
+/* about */
+#ueber-uns{background:var(--surface);display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;padding:0;overflow:hidden}
+.about-img{position:relative;min-height:580px;overflow:hidden}
+.about-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(.9);transition:transform .8s ease}
+.about-img:hover img{transform:scale(1.03)}
+.about-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,31,46,.35) 0%,transparent 70%)}
+.about-content{background:var(--bg);padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center}
+.about-list{margin-top:2rem;display:flex;flex-direction:column;gap:1rem}
+.about-item{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;background:var(--surface);border-left:2px solid var(--amber);box-shadow:var(--shadow)}
+.about-item .ai-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.about-item strong{display:block;font-size:.9rem;font-weight:500;margin-bottom:.2rem}
+.about-item span{font-size:.82rem;color:var(--muted)}
+
+/* pikett */
+#pikett{background:var(--surface);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;padding:6rem 4rem}
+.pikett-visual{position:relative;aspect-ratio:1;max-width:420px}
+.pikett-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(232,146,10,.15);animation:spin 20s linear infinite}
+.pikett-ring:nth-child(2){inset:15%;border-color:rgba(232,146,10,.3);animation-duration:14s;animation-direction:reverse}
+.pikett-ring:nth-child(3){inset:30%;border-color:rgba(232,146,10,.5);animation-duration:8s}
+.pikett-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.pikett-center .big-num{font-family:var(--ff-d);font-size:5rem;line-height:1;color:var(--amber)}
+.pikett-center .sub{font-family:var(--ff-m);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:.4rem}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.pikett-dot{position:absolute;width:10px;height:10px;background:var(--amber);border-radius:50%;top:0;left:50%;transform-origin:0 210px;animation:orbit 8s linear infinite;box-shadow:0 0 14px rgba(232,146,10,.6)}
+@keyframes orbit{from{transform:translateX(-50%) rotate(0deg)}to{transform:translateX(-50%) rotate(360deg)}}
+
+/* gallery */
+#galerie{background:var(--bg);padding:6rem 4rem}
+.gallery-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:220px 220px;gap:6px;margin-top:3rem}
+.gcell{position:relative;overflow:hidden}
+.gg1{grid-column:1/6;grid-row:1/2}
+.gg2{grid-column:6/9;grid-row:1/2}
+.gg3{grid-column:9/13;grid-row:1/3}
+.gg4{grid-column:1/4;grid-row:2/3}
+.gg5{grid-column:4/9;grid-row:2/3}
+.gcell img{width:100%;height:100%;object-fit:cover;filter:brightness(.78) saturate(.9);transition:filter .5s,transform .6s}
+.gcell:hover img{filter:brightness(.9) saturate(1.1);transform:scale(1.05)}
+.gcell-cap{position:absolute;bottom:0;left:0;right:0;padding:.8rem 1rem;background:linear-gradient(0,rgba(26,31,46,.85),transparent);font-family:var(--ff-m);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,205,100,.95)}
+
+/* process */
+#prozess{background:var(--surface);padding:6rem 4rem}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3.5rem;position:relative}
+.process-steps::before{content:'';position:absolute;top:2.3rem;left:calc(12.5% + 24px);right:calc(12.5% + 24px);height:1px;background:linear-gradient(90deg,var(--amber),rgba(232,146,10,.2),var(--amber));z-index:0}
+.process-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 1.5rem;position:relative;z-index:1;opacity:0;transform:translateY(25px);transition:opacity .5s ease,transform .5s ease}
+.process-step.visible{opacity:1;transform:translateY(0)}
+.step-num{width:48px;height:48px;background:var(--surface);border:2px solid var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-m);font-size:.9rem;font-weight:700;color:var(--amber);margin-bottom:1.5rem;flex-shrink:0;position:relative}
+.step-num::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(232,146,10,.25)}
+.process-step h4{font-family:var(--ff-d);font-size:1.3rem;letter-spacing:.04em;margin-bottom:.6rem}
+.process-step p{font-size:.83rem;color:var(--muted);line-height:1.6;font-weight:300}
+
+/* testimonials */
+#referenzen{background:var(--bg);padding:6rem 4rem}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.testi-card{background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;box-shadow:var(--shadow)}
+.testi-card.visible{opacity:1;transform:translateY(0)}
+.testi-card::before{content:'"';position:absolute;top:-.5rem;left:1.2rem;font-family:var(--ff-d);font-size:6rem;color:rgba(232,146,10,.12);line-height:1;pointer-events:none}
+.testi-stars{color:var(--amber);font-size:.85rem;margin-bottom:1rem;letter-spacing:.2em}
+.testi-text{font-size:.9rem;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:1.5rem;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:.8rem}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--surface);border:2px solid rgba(245,166,35,.3);display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:1.1rem;color:var(--amber);flex-shrink:0}
+.testi-name{font-size:.85rem;font-weight:500}
+.testi-role{font-size:.75rem;color:var(--muted);font-family:var(--ff-m)}
+
+/* standorte */
+#standorte{background:var(--surface)}
+.locations-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem}
+.location-card{background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);padding:2.5rem 2rem;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.location-card.visible{opacity:1;transform:translateY(0)}
+.location-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),transparent 80%)}
+.loc-num{font-family:var(--ff-m);font-size:.65rem;letter-spacing:.15em;color:var(--amber);margin-bottom:1.2rem;text-transform:uppercase}
+.location-card h3{font-family:var(--ff-d);font-size:1.8rem;letter-spacing:.04em;margin-bottom:.5rem}
+.location-card address{font-style:normal;font-size:.9rem;color:var(--muted);line-height:1.6;font-weight:300}
+.loc-map-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:var(--ff-m);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;transition:gap .2s}
+.loc-map-btn:hover{gap:.9rem}
+
+/* contact */
+#kontakt{background:var(--bg)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3.5rem;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:1.5rem}
+.contact-item{display:flex;align-items:flex-start;gap:1.2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);opacity:0;transform:translateX(-20px);transition:opacity .5s ease,transform .5s ease,border-color .2s}
+.contact-item.visible{opacity:1;transform:translateX(0)}
+.contact-item:hover{border-color:rgba(245,166,35,.3)}
+.ci-icon{width:40px;height:40px;flex-shrink:0;background:rgba(232,146,10,.1);display:flex;align-items:center;justify-content:center;font-size:1.1rem;clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))}
+.ci-label{font-family:var(--ff-m);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.ci-value{font-size:.95rem;color:var(--text)}
+.ci-value a{color:var(--text);text-decoration:none;transition:color .2s}
+.ci-value a:hover{color:var(--amber)}
+.ci-note{font-size:.72rem;color:var(--muted);margin-top:.2rem;font-family:var(--ff-m)}
+.contact-form-wrap{background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md);padding:2.5rem;opacity:0;transform:translateX(20px);transition:opacity .6s ease .2s,transform .6s ease .2s}
+.contact-form-wrap.visible{opacity:1;transform:translateX(0)}
+.form-title{font-family:var(--ff-d);font-size:1.8rem;letter-spacing:.04em;margin-bottom:1.8rem}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-family:var(--ff-m);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--ff-b);font-size:.9rem;padding:.8rem 1rem;outline:none;transition:border-color .2s;appearance:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--amber)}
+.form-group textarea{resize:vertical;min-height:100px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn-submit{width:100%;font-family:var(--ff-m);font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--amber),var(--amber2));border:none;padding:1rem;cursor:none;margin-top:.5rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));transition:opacity .2s,transform .2s}
+.btn-submit:hover{opacity:.85;transform:translateY(-2px)}
+footer{background:#1a1f2e;border-top:1px solid var(--border);padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.footer-logo{font-family:var(--ff-d);font-size:1.4rem;letter-spacing:.08em;color:#f8f7f4}
+.footer-logo span{color:var(--amber)}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.4);font-family:var(--ff-m)}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--amber)}
+.fade-in{opacity:0;transform:translateY(25px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:1100px){
+  .process-steps{grid-template-columns:1fr 1fr;gap:3rem}
+  .process-steps::before{display:none}
+  .testi-grid{grid-template-columns:1fr}
+  .gallery-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px}
+  .gg1,.gg2,.gg3,.gg4,.gg5{grid-column:auto;grid-row:auto}
+}
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  .hero{grid-template-columns:1fr;padding:7rem 1.5rem 3rem;gap:3rem}
+  section{padding:4rem 1.5rem}
+  #pikett{grid-template-columns:1fr;padding:4rem 1.5rem}
+  #ueber-uns{grid-template-columns:1fr}
+  .about-img{min-height:300px}.about-content{padding:3rem 1.5rem}
+  .locations-grid,.contact-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  footer{padding:2rem 1.5rem;flex-direction:column;align-items:flex-start}
+  .photo-strip{grid-template-columns:1fr;height:auto}
+  .ps-slot{height:220px}
+  #galerie,#prozess,#referenzen{padding:4rem 1.5rem}
+  .process-steps{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="mainnav">
+  <a href="#" class="nav-logo">AB<span>.</span>TECHNIK</a>
+  <ul class="nav-links">
+    <li><a href="#leistungen">Leistungen</a></li>
+    <li><a href="#ueber-uns">Über uns</a></li>
+    <li><a href="#galerie">Projekte</a></li>
+    <li><a href="#prozess">Ablauf</a></li>
+    <li><a href="#referenzen">Referenzen</a></li>
+    <li><a href="#standorte">Standorte</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="tel:+41796088149" class="nav-cta">+41 79 608 81 49</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">&#9889; Schweizer Elektrotechnik</div>
+    <h1>STROM.<br/><span class="accent">SICHER.</span><br/><span class="stroke">SMART.</span></h1>
+    <p class="hero-sub">Ihr zuverlässiger Partner für Elektroinstallationen, Sicherheitsanlagen, Gebäudeautomation und 24/7-Piketteinsätze in der Region Basel.</p>
+    <div class="hero-actions">
+      <a href="#kontakt" class="btn-primary">Kontakt aufnehmen</a>
+      <a href="#leistungen" class="btn-ghost">Unsere Leistungen &rarr;</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <div class="pikett-badge">
+      <div class="pikett-icon">🚨</div>
+      <div class="pikett-text">
+        <div class="big">24 / 7 Pikettdienst</div>
+        <div class="small">Elektro-Notfalldienst &middot; Schnell vor Ort</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Standorte &mdash; Brislach &amp; Hofstetten</div>
+    </div>
+    <div class="stat-card cyan">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">Spezialbereiche in der Elektrotechnik</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP -->
+<div class="photo-strip">
+  <div class="ps-slot">
+    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900&q=80&fit=crop" alt="Elektriker bei der Arbeit"/>
+    <div class="ps-cap">Elektroinstallation</div>
+  </div>
+  <div class="ps-slot">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80&fit=crop" alt="Sicherheitsanlage"/>
+    <div class="ps-cap">Sicherheitstechnik</div>
+  </div>
+  <div class="ps-slot">
+    <img src="https://saddlebrown-weasel-811231.hostingersite.com/wp-content/uploads/2026/06/pexels-maarten-ceulemans-1837879676-36564992.jpg" alt="Gebäudeautomation"/>
+    <div class="ps-cap">Gebäudeautomation</div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item"><span class="dot"></span>Elektroinstallationen</div>
+    <div class="ticker-item"><span class="dot"></span>Sicherheitsanlagen</div>
+    <div class="ticker-item"><span class="dot"></span>Brandschutz</div>
+    <div class="ticker-item"><span class="dot"></span>Gebäudeautomation</div>
+    <div class="ticker-item"><span class="dot"></span>Kommunikationssysteme</div>
+    <div class="ticker-item"><span class="dot"></span>Geräteprüfung</div>
+    <div class="ticker-item"><span class="dot"></span>24/7 Pikett</div>
+    <div class="ticker-item"><span class="dot"></span>Elektroinstallationen</div>
+    <div class="ticker-item"><span class="dot"></span>Sicherheitsanlagen</div>
+    <div class="ticker-item"><span class="dot"></span>Brandschutz</div>
+    <div class="ticker-item"><span class="dot"></span>Gebäudeautomation</div>
+    <div class="ticker-item"><span class="dot"></span>Kommunikationssysteme</div>
+    <div class="ticker-item"><span class="dot"></span>Geräteprüfung</div>
+    <div class="ticker-item"><span class="dot"></span>24/7 Pikett</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="leistungen">
+  <div class="fade-in">
+    <div class="section-label">// 01 &mdash; Leistungen</div>
+    <div class="section-title">WAS WIR<br/>BIETEN</div>
+    <p class="section-sub">Von der klassischen Elektroinstallation bis zur intelligenten Gebäudeautomation &mdash; wir decken das gesamte Spektrum moderner Elektrotechnik ab.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-num">01</div><div class="service-icon">&#9889;</div><h3>Elektroinstallationen</h3><p>Professionelle Neu- und Umbauten für Wohn- und Gewerbegebäude. Von der Planung bis zur Abnahme — alles aus einer Hand.</p></div>
+    <div class="service-card"><div class="service-num">02</div><div class="service-icon">🛡️</div><h3>Sicherheitsanlagen</h3><p>Modernste Einbruchmelder, Zugangssysteme und Überwachungstechnik für maximalen Schutz Ihrer Liegenschaften.</p></div>
+    <div class="service-card"><div class="service-num">03</div><div class="service-icon">🔥</div><h3>Brandschutzanlagen</h3><p>Zuverlässige Brandmeldesysteme, Sprinkleransteuerung und Notbeleuchtung nach aktuellen Normen und Vorschriften.</p></div>
+    <div class="service-card"><div class="service-num">04</div><div class="service-icon">🏠</div><h3>Gebäudeautomation</h3><p>Intelligente Steuerung von Licht, Heizung, Klima und Beschattung. Smart Living für mehr Komfort und Energieeffizienz.</p></div>
+    <div class="service-card"><div class="service-num">05</div><div class="service-icon">📡</div><h3>Kommunikationssysteme</h3><p>Strukturierte Verkabelung, Netzwerkinfrastruktur, Intercom-Anlagen und moderne Datentechnik für Büro und Betrieb.</p></div>
+    <div class="service-card"><div class="service-num">06</div><div class="service-icon">🔬</div><h3>Geräteprüfung</h3><p>Normgerechte Prüfung ortsveränderlicher Elektrogeräte (SUVA/VDE) mit vollständiger Dokumentation und Prüfprotokoll.</p></div>
+    <div class="service-card"><div class="service-num">07</div><div class="service-icon">🚨</div><h3>24/7 Pikettdienst</h3><p>Rund um die Uhr verfügbar &mdash; unser Pikettdienst für elektrotechnische Notfälle ist schnell, kompetent und zuverlässig vor Ort.</p></div>
+    <div class="service-card" style="background:rgba(232,146,10,.04)"><div class="service-num">+</div><div class="service-icon" style="background:rgba(8,145,178,.1);border-color:rgba(8,145,178,.2)">💡</div><h3>Individuelle Lösungen</h3><p>Jedes Projekt ist einzigartig. Wir erarbeiten gemeinsam massgeschneiderte Konzepte für Ihre spezifischen Anforderungen.</p></div>
+  </div>
+</section>
+
+<!-- NEW: ÜBER UNS -->
+<section id="ueber-uns">
+  <div class="about-img">
+    <img src="https://saddlebrown-weasel-811231.hostingersite.com/wp-content/uploads/2026/06/pexels-philips-espinoza-1275989311-26100225-1152x1536.jpg" alt="Elektriker bei professioneller Arbeit"/>
+    <div class="about-overlay"></div>
+  </div>
+  <div class="about-content">
+    <div class="fade-in">
+      <div class="section-label">// 02 &mdash; Über uns</div>
+      <div class="section-title">ERFAHRUNG<br/>DIE ZÄHLT</div>
+      <p class="section-sub">Kelbas Technik steht für handwerkliche Präzision, moderne Technologiekompetenz und persönliche Beratung. Mit zwei Standorten in der Region Baselland sind wir schnell, zuverlässig und immer in Ihrer Nähe.</p>
+    </div>
+    <div class="about-list fade-in">
+      <div class="about-item"><div class="ai-icon">🎯</div><div><strong>Qualität aus einer Hand</strong><span>Planung, Installation und Wartung &mdash; wir begleiten Ihr Projekt von Anfang bis Ende.</span></div></div>
+      <div class="about-item"><div class="ai-icon">📍</div><div><strong>Lokale Verwurzelung</strong><span>Zwei Standorte in Brislach und Hofstetten &mdash; für kurze Wege und schnelle Reaktionszeiten.</span></div></div>
+      <div class="about-item"><div class="ai-icon">🏆</div><div><strong>Zertifiziert &amp; normgerecht</strong><span>Alle Arbeiten werden nach aktuellen Schweizer Normen und Sicherheitsstandards ausgeführt.</span></div></div>
+      <div class="about-item"><div class="ai-icon">&#9889;</div><div><strong>24/7 Verfügbarkeit</strong><span>Bei Notfällen sind wir rund um die Uhr erreichbar &mdash; Elektrostörungen kennen keine Bürozeiten.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PIKETT DETAIL -->
+<section id="pikett">
+  <div class="pikett-visual">
+    <div class="pikett-ring"></div><div class="pikett-ring"></div><div class="pikett-ring"></div>
+    <div class="pikett-dot"></div>
+    <div class="pikett-center"><div class="big-num">24/7</div><div class="sub">Pikettdienst Elektro</div></div>
+  </div>
+  <div class="fade-in">
+    <div class="section-label">// 03 &mdash; Notfalldienst</div>
+    <div class="section-title">IMMER<br/>BEREIT</div>
+    <p class="section-sub" style="margin-bottom:1.5rem">Elektrische Störungen kennen keine Geschäftszeiten. Unser 24/7-Pikettdienst im Bereich Elektro stellt sicher, dass Sie jederzeit schnell und professionell Hilfe erhalten &mdash; egal ob mitten in der Nacht oder am Wochenende.</p>
+    <p class="section-sub" style="margin-bottom:2rem">Wir sind für Privatkunden, Gewerbe und Industrie im Raum Basel und Umgebung verfügbar.</p>
+    <a href="tel:+41796088149" class="btn-primary">Jetzt anrufen: +41 79 608 81 49</a>
+  </div>
+</section>
+
+<!-- NEW: GALERIE -->
+<section id="galerie">
+  <div class="fade-in">
+    <div class="section-label">// 04 &mdash; Referenzprojekte</div>
+    <div class="section-title">UNSERE<br/>PROJEKTE</div>
+    <p class="section-sub">Ein Einblick in abgeschlossene Installationen, Anlagen und Systeme &mdash; Qualität, die man sieht.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gcell gg1"><img src="https://saddlebrown-weasel-811231.hostingersite.com/wp-content/uploads/2026/06/24062.jpg " alt="Schaltschrank"/><div class="gcell-cap">Elektroverteiler &amp; Schaltschrank</div></div>
+    <div class="gcell gg2"><img src="https://saddlebrown-weasel-811231.hostingersite.com/wp-content/uploads/2026/06/pexels-binyaminmellish-106399-1.jpg" alt="Smart Building"/><div class="gcell-cap">Smart Building Steuerung</div></div>
+    <div class="gcell gg3"><img src="https://saddlebrown-weasel-811231.hostingersite.com/wp-content/uploads/2026/06/pexels-loc-ho-2161282566-37352142.jpg" alt="Brandschutzanlage"/><div class="gcell-cap">Brandschutzanlage</div></div>
+    <div class="gcell gg4"><img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=500&q=80&fit=crop" alt="Verkabelung"/><div class="gcell-cap">Strukturierte Verkabelung</div></div>
+    <div class="gcell gg5"><img src="https://images.unsplash.com/photo-1565891741441-64926e441838?w=800&q=80&fit=crop" alt="Sicherheitssystem"/><div class="gcell-cap">Sicherheits- &amp; Zugangssysteme</div></div>
+  </div>
+</section>
+
+<!-- NEW: PROZESS -->
+<section id="prozess">
+  <div class="fade-in">
+    <div class="section-label">// 05 &mdash; Unser Ablauf</div>
+    <div class="section-title">SO ARBEITEN<br/>WIR</div>
+    <p class="section-sub">Von der ersten Anfrage bis zur fertigen Installation &mdash; ein klarer, transparenter Prozess in vier Schritten.</p>
+  </div>
+  <div class="process-steps">
+    <div class="process-step"><div class="step-num">01</div><h4>KONTAKT &amp; BERATUNG</h4><p>Sie melden sich per Telefon oder Formular. Wir hören zu, stellen die richtigen Fragen und analysieren Ihr Vorhaben.</p></div>
+    <div class="process-step"><div class="step-num">02</div><h4>OFFERTE &amp; PLANUNG</h4><p>Sie erhalten eine transparente, detaillierte Offerte. Bei Auftragserteilung planen wir den Ablauf gemeinsam mit Ihnen.</p></div>
+    <div class="process-step"><div class="step-num">03</div><h4>INSTALLATION</h4><p>Unser Fachteam führt die Arbeiten sauber, pünktlich und nach Schweizer Norm aus. Sie werden laufend informiert.</p></div>
+    <div class="process-step"><div class="step-num">04</div><h4>ABNAHME &amp; SUPPORT</h4><p>Nach der Abnahme erhalten Sie vollständige Dokumentation. Bei Fragen oder Störungen sind wir weiterhin für Sie da.</p></div>
+  </div>
+</section>
+
+<!-- NEW: TESTIMONIALS -->
+<section id="referenzen">
+  <div class="fade-in">
+    <div class="section-label">// 06 &mdash; Kundenstimmen</div>
+    <div class="section-title">WAS KUNDEN<br/>SAGEN</div>
+    <p class="section-sub">Die Zufriedenheit unserer Kunden ist unser bester Massstab. Hier ein Auszug aus dem Feedback.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">Sehr professionelle Arbeit beim Umbau unserer Elektroinstallation. Das Team war pünktlich, sauber und hat alles verständlich erklärt. Absolute Empfehlung!</p>
+      <div class="testi-author"><div class="testi-avatar">MH</div><div><div class="testi-name">Markus H.</div><div class="testi-role">Einfamilienhaus &middot; Brislach</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">Der Pikettdienst hat uns nachts um 2 Uhr schnell aus der Klemme geholfen. Innert 30 Minuten war der Techniker vor Ort und die Störung behoben. Danke!</p>
+      <div class="testi-author"><div class="testi-avatar">SK</div><div><div class="testi-name">Sandra K.</div><div class="testi-role">Gewerbebetrieb &middot; Hofstetten</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">Die Gebäudeautomation in unserem Neubau wurde von Kelbas Technik kompetent geplant und installiert. Alles funktioniert einwandfrei, wir sind begeistert.</p>
+      <div class="testi-author"><div class="testi-avatar">TF</div><div><div class="testi-name">Thomas F.</div><div class="testi-role">Neubau &middot; Basel</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDORTE -->
+<section id="standorte">
+  <div class="fade-in">
+    <div class="section-label">// 07 &mdash; Standorte</div>
+    <div class="section-title">ZWEI<br/>STANDORTE</div>
+    <p class="section-sub">Optimal positioniert in der Region Baselland &mdash; für schnelle Einsatzzeiten und lokale Kompetenz.</p>
+  </div>
+  <div class="locations-grid">
+    <div class="location-card"><div class="loc-num">Standort 01</div><h3>Brislach</h3><address>Hofgarten 44<br/>4225 Brislach<br/>Kanton Basel-Landschaft</address><a href="https://maps.google.com/?q=Hofgarten+44,+4225+Brislach" target="_blank" class="loc-map-btn">Auf Karte anzeigen &rarr;</a></div>
+    <div class="location-card"><div class="loc-num">Standort 02</div><h3>Hofstetten</h3><address>Ettingerstrasse 51<br/>4114 Hofstetten<br/>Kanton Basel-Landschaft</address><a href="https://maps.google.com/?q=Ettingerstrasse+51,+4114+Hofstetten" target="_blank" class="loc-map-btn">Auf Karte anzeigen &rarr;</a></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt">
+  <div class="fade-in">
+    <div class="section-label">// 08 &mdash; Kontakt</div>
+    <div class="section-title">SPRECHEN<br/>WIR</div>
+    <p class="section-sub">Haben Sie ein Projekt oder einen Notfall? Kontaktieren Sie uns direkt &mdash; wir melden uns prompt zurück.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item"><div class="ci-icon">📞</div><div><div class="ci-label">Telefon</div><div class="ci-value"><a href="tel:+41796088149">+41 79 608 81 49</a></div><div class="ci-note">Auch für Pikettdienst 24/7</div></div></div>
+      <div class="contact-item"><div class="ci-icon">✉️</div><div><div class="ci-label">E-Mail</div><div class="ci-value"><a href="mailto:Kelbas.technik@gmail.com">Kelbas.technik@gmail.com</a></div><div class="ci-note">Adresse wird in Kürze aktualisiert</div></div></div>
+      <div class="contact-item"><div class="ci-icon">📍</div><div><div class="ci-label">Standorte</div><div class="ci-value">Brislach &amp; Hofstetten</div><div class="ci-note">Region Basel-Landschaft</div></div></div>
+      <div class="contact-item"><div class="ci-icon">🕐</div><div><div class="ci-label">Erreichbarkeit</div><div class="ci-value">Mo&ndash;Fr 07:00&ndash;17:00</div><div class="ci-note">Pikettdienst Elektro: 24/7</div></div></div>
+    </div>
+    <div class="contact-form-wrap">
+      <div class="form-title">NACHRICHT SENDEN</div>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group"><label>Vorname</label><input type="text" placeholder="Max"/></div>
+          <div class="form-group"><label>Nachname</label><input type="text" placeholder="Mustermann"/></div>
+        </div>
+        <div class="form-group"><label>E-Mail</label><input type="email" placeholder="ihre@email.ch"/></div>
+        <div class="form-group"><label>Telefon</label><input type="tel" placeholder="+41 79 000 00 00"/></div>
+        <div class="form-group"><label>Betreff</label><select><option>Allgemeine Anfrage</option><option>Elektroinstallation</option><option>Sicherheitsanlage</option><option>Brandschutz</option><option>Gebäudeautomation</option><option>Kommunikationssysteme</option><option>Geräteprüfung</option><option>Pikettdienst / Notfall</option><option>Offerte anfragen</option></select></div>
+        <div class="form-group"><label>Nachricht</label><textarea placeholder="Beschreiben Sie Ihr Anliegen..."></textarea></div>
+        <button type="submit" class="btn-submit">Nachricht absenden &rarr;</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">AB<span>.</span>TECHNIK</div>
+  <div class="footer-copy">&copy; 2026 Kelbas Technik. Alle Rechte vorbehalten.</div>
+  <div class="footer-links"><a href="#leistungen">Leistungen</a><a href="#galerie">Projekte</a><a href="#standorte">Standorte</a><a href="#kontakt">Kontakt</a></div>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let rx=0,ry=0,mx=0,my=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(animRing)})();
+document.querySelectorAll('a,button,input,textarea,select').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.opacity='1';ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.opacity='.5';ring.style.width='38px';ring.style.height='38px'});
+});
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.12});
+document.querySelectorAll('.fade-in,.service-card,.stat-card,.location-card,.contact-item,.contact-form-wrap,.testi-card,.process-step').forEach(el=>obs.observe(el));
+document.querySelectorAll('.service-card').forEach((c,i)=>c.style.transitionDelay=`${i*.07}s`);
+document.querySelectorAll('.testi-card').forEach((c,i)=>c.style.transitionDelay=`${i*.12}s`);
+document.querySelectorAll('.process-step').forEach((c,i)=>c.style.transitionDelay=`${i*.1}s`);
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('.btn-submit');
+  btn.textContent='✓ Nachricht gesendet!';
+  btn.style.background='linear-gradient(135deg,#22d4f0,#0ba8c2)';
+  setTimeout(()=>{btn.textContent='Nachricht absenden →';btn.style.background=''},3000);
+}
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainnav').style.borderBottomColor=window.scrollY>50?'rgba(232,146,10,.25)':'rgba(0,0,0,0.08)';
+});
+</script>
+</body>
+</html>
